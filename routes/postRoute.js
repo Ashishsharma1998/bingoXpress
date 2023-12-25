@@ -6,7 +6,7 @@ const router = express.Router();
 router.get("/timeline",getTimelinePost);
 router.get("/profile",getProfilePost);
 router.post("/add",addPost);
-router.delete("/",deletePost);
+router.delete("/:id",deletePost);
 router.post("/like",likePost);
 router.delete("/dislike/:postId",dislikePost)
 router.get("/likes",getLikes);

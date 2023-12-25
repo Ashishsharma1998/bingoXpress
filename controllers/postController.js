@@ -114,7 +114,7 @@ const addPost = async(req,res)=>{
 }
 
 
-const deletePost = async()=>{
+const deletePost = async(req,res)=>{
    try {
       const token = req.cookies.token;
       const postId = req.params.id;

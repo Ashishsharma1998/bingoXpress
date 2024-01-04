@@ -36,14 +36,14 @@ const userSchema = new Schema({
     type:String,
     default:"something.com"
   },
-  followers:{
-    type:Array,
-    default:[]
-  },
-  followings:{
-    type:Array,
-    default:[]
-    }
+  followers:[{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"User"
+  }],
+  followings:[{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"User"
+  }]
   
 },{
     timestamps:true

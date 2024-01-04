@@ -1,5 +1,7 @@
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
+const {createChannel , publisher} = require("../messageBroker");
+
 
 
 //follow and unfollow a user
@@ -17,11 +19,16 @@ const followUser = async(req,res)=>{
        if(!user.followers.includes(currentUser._id)){
         await user.updateOne({$push:{followers:userId}});
         await currentUser.updateOne({$push:{followings:followedUserId}});
-         return res.status(201).json("user has been followed");
+        res.send("user has been followed");
        }
-       return {message:"user has already been followed"}
-  
-  
+
+       res.send({message:"user has already been followed"});
+
+       const message = {activity:"followed" , email:user.email , currentUser:currentUser.name,user:user.name};
+       const channel =  await createChannel();
+       await publisher(channel,"key",JSON.stringify(message));
+
+       
     } catch (error) {
       return res.status(500).json("something went wrong");
     }

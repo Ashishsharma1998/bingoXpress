@@ -44,8 +44,8 @@ app.use("/api/comments",commentRoute);
 
 
 
-app.listen(4000,async()=>{
-console.log("server started at port at 4000");
+app.listen(3000,async()=>{
+console.log("server started at port at 3000");
 await connectDb();
 console.log("db connected");
 })

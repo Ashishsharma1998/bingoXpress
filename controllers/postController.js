@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const Post  = require("../models/postModel");
 const User = require("../models/userModel");
 const Like = require("../models/likeModel");
+const { createChannel,publisher} = require("../messageBroker.js");
 
 
 const getTimelinePost = async(req,res)=>{
@@ -100,14 +101,23 @@ const addPost = async(req,res)=>{
       if(!userId){
         return {message:"user is not authenticated!"};
       }
-      
-
       await Post.create({
         desc:req.body.desc,
         userId:userId
       });
 
-      return res.status(201).json("post has been posted");
+       res.send("post has been posted");
+       
+        const user = await User.findById(userId).populate("followers");
+        const followers = user.followers;
+        // const channel =  await createChannel();
+        followers?.forEach(async(d)=>{
+          const message = {postedby:user.name , follower:d?.name , email:d?.email, activity:"posted"};
+          const channel =  await createChannel();
+          await publisher(channel,"key",JSON.stringify(message));
+        })       
+
+
    } catch (error) {
       return res.status(500).json("something went wrong");
    }
